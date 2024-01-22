@@ -2,7 +2,7 @@
 import express from 'express'
 
 // import controllers
-import { getProfiles, updateProfile, deleteProfile } from '../controllers/profile.js'
+import { getProfiles, updateProfile, deleteProfile, getProfile } from '../controllers/profile.js'
 import User from '../model/user.js'
 import isLoggedIn from '../middleware/isLoggedIn.js'
 import { updateUser } from '../controllers/user.js'
@@ -23,6 +23,21 @@ router.get('/profiles', isLoggedIn, async (req, res) => {
         })
     }
     
+})
+
+router.get('/profiles/:id', isLoggedIn, async (req, res) => {
+    try{
+        const id = req.params.id
+        const profile = await getProfile(id)
+        res.status(200).send({
+            thisProfile: `${profile}`
+        })
+    }
+    catch(error){
+        res.status(500).send({
+            getSingleProfileError: `${error}`
+        })
+    }
 })
 
 router.put('/profiles/:id', isLoggedIn, async (req, res) => {
